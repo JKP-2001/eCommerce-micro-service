@@ -8,6 +8,7 @@ spring:
       server:
         native:
           search-locations: classpath:/configurations
+      override-system-properties:
 
 server:
   port: 8888
