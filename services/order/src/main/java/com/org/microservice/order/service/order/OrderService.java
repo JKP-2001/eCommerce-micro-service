@@ -12,6 +12,7 @@ import com.org.microservice.order.model.orderline.OrderLine;
 import com.org.microservice.order.repository.order.OrderRepository;
 import com.org.microservice.order.repository.orderline.OrderLineRepository;
 import com.org.microservice.order.service.customer.CustomerService;
+import com.org.microservice.order.service.payment.PaymentService;
 import com.org.microservice.order.service.product.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,7 @@ public class OrderService {
     private final OrderLineRepository orderLineRepository;
     private final CustomerService customerService;
     private final ProductService productService;
+    private final PaymentService paymentService;
     private final OrderMapper orderMapper;
     private final OrderProducer orderProducer;
 
@@ -64,13 +66,16 @@ public class OrderService {
                 )
         );
 
-//        PaymentRequest paymentRequest = PaymentRequest.builder()
-//                .paymentMethod(orderRequest.paymentMethod())
-//                .orderReference(orderRequest.reference())
-//                .orderId(order.getId())
-//                .amount(order.getTotalAmount())
-//                .customer(customer)
-//                .build();
+        PaymentRequest paymentRequest = PaymentRequest
+                .builder()
+                .paymentMethod(orderRequest.paymentMethod())
+                .orderReference(orderRequest.reference())
+                .orderId(order.getId())
+                .amount(order.getTotalAmount())
+                .customer(customer)
+                .build();
+
+        Integer paymentId = paymentService.createPayment(paymentRequest);
 
         return order.getId();
     }
