@@ -52,7 +52,7 @@ public class ProductService {
             ProductPurchaseRequest requestProduct = request.get(i);
 
             if(storedProduct.getAvailableQuantity()<requestProduct.quantity()){
-                throw new ProductPurchaseException("Required quntity exceeds available quantity for id = "+storedProduct.getId());
+                throw new ProductPurchaseException("Required quantity exceeds available quantity for id = "+storedProduct.getId());
             }
 
             storedProduct.setAvailableQuantity(storedProduct.getAvailableQuantity()-requestProduct.quantity());

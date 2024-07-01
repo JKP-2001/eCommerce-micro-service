@@ -1,6 +1,5 @@
-package com.org.microservice.customer.dto;
+package com.org.microservice.order.dto.customer;
 
-import com.org.microservice.customer.model.Address;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,3 +11,4 @@ public class CustomerResponse {
     private String lastname;
     private String email;
 }
+

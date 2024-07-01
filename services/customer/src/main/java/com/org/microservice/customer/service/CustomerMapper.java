@@ -22,7 +22,6 @@ public class CustomerMapper {
                 .email(customer.getEmail())
                 .firstName(customer.getFirstName())
                 .lastname(customer.getLastname())
-                .address(customer.getAddress())
                 .build();
     }
 }
