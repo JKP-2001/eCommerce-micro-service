@@ -65,10 +65,9 @@ public class ProductService {
     }
 
     public ProductResponse findById(Integer productId) {
-        var response = productMapper.mapToReponse(productRepository.findById(productId).isEmpty() ?null:productRepository.findById(productId).get());
-        if(response==null){
-            return null;
-        }
-        return response;
+
+        return productRepository.findById(productId)
+                .map(productMapper::mapToReponse)
+                .orElseThrow(()-> new ProductPurchaseException("Product with id = "+productId+" not found."));
     }
 }
