@@ -2,9 +2,11 @@ package com.org.microservice.notification;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
-public class cleaNotificationApplication {
+@EnableAsync
+public class NotificationApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(NotificationApplication.class, args);

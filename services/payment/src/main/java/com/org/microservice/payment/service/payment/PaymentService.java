@@ -5,6 +5,7 @@ import com.org.microservice.payment.dto.payment.PaymentRequest;
 import com.org.microservice.payment.kafka.payment.PaymentNotificationProducer;
 import com.org.microservice.payment.model.payment.Payment;
 import com.org.microservice.payment.repository.payment.PaymentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,11 @@ public class PaymentService {
     private final PaymentMapper paymentMapper;
     private final PaymentNotificationProducer paymentNotificationProducer;
 
+    @Transactional
     public Integer createPayment(PaymentRequest paymentRequest) {
+
         Payment payment = paymentRepository.save(paymentMapper.toPayment(paymentRequest));
+
         paymentNotificationProducer.sendPaymentNotification(
                 PaymentNotificationRequest.builder()
                         .orderReference(paymentRequest.reference())
@@ -28,6 +32,7 @@ public class PaymentService {
                         .customerLastName(paymentRequest.customer().lastName())
                         .build()
         );
+
         return payment.getId();
     }
 }

@@ -32,6 +32,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderProducer orderProducer;
 
+
     @Transactional
     public Integer createOrder(OrderRequest orderRequest) {
         var customer = customerService.findCustomerById(orderRequest.customerId())
@@ -76,6 +77,8 @@ public class OrderService {
                 .build();
 
         Integer paymentId = paymentService.createPayment(paymentRequest);
+
+
 
         return order.getId();
     }

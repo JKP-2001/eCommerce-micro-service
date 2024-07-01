@@ -1,16 +1,4 @@
-#spring:
-#  application:
-#    name: notification-service
-#  config:
-#    import: optional:configserver:http://localhost:8888
-
-
 spring:
-  application:
-    name: notification-service
-  cloud:
-    config:
-      enabled: false
   data:
     mongodb:
       username: jkp
@@ -24,10 +12,11 @@ spring:
       group-id: paymentGroup,orderGroup
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       properties:
         spring.json.trusted.packages: '*'
         spring.json.type.mapping: orderConfirmation:com.org.microservice.notification.kafka.order.OrderConfirmation, paymentConfirmation:com.org.microservice.notification.kafka.payment.PaymentNotificationRequest
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
 
   mail:
     host: localhost
@@ -49,3 +38,5 @@ server:
   port: 8080
 
 
+#  spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+#  spring.kafka.consumer.properties.spring.deserializer.value.delegate.class=org.springframework.kafka.support.serializer.JsonDeserializer
