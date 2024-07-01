@@ -20,10 +20,10 @@ import static com.org.microservice.notification.model.NotificationType.PAYMENT_C
 @Slf4j
 public class NotificationConsumer {
     private final NotificationRepository notificationRepository;
-    private EmailService emailService;
+    private final EmailService emailService;
 
     @KafkaListener(topics = "payment-topic", groupId = "paymentGroup")
-    public void consumePaymentSuccessNotification(PaymentNotificationRequest paymentNotificationRequest){
+    public void consumePaymentSuccessNotification(PaymentNotificationRequest paymentNotificationRequest) throws MessagingException {
         log.info(String.format("Consuming the message from payment topic:: %s", paymentNotificationRequest));
         notificationRepository.save(
                 Notification.builder()
@@ -35,16 +35,16 @@ public class NotificationConsumer {
         var customerName = paymentNotificationRequest.customerFirstName()+" "+paymentNotificationRequest.customerLastName();
         var destinationEmail = paymentNotificationRequest.customerEmail();
 
-//        emailService.sendPaymentSuccessEmail(
-//                destinationEmail,
-//                customerName,
-//                paymentNotificationRequest.amount(),
-//                paymentNotificationRequest.orderReference()
-//        );
+        emailService.sendPaymentSuccessEmail(
+                destinationEmail,
+                customerName,
+                paymentNotificationRequest.amount(),
+                paymentNotificationRequest.orderReference()
+        );
     }
 
     @KafkaListener(topics = "order-topic", groupId = "orderGroup")
-    public void consumeOrderConfirmationNotification(OrderConfirmation orderConfirmation) {
+    public void consumeOrderConfirmationNotification(OrderConfirmation orderConfirmation) throws MessagingException {
         log.info(String.format("Consuming the message from order topic:: %s", orderConfirmation));
         notificationRepository.save(
                 Notification.builder()
@@ -59,13 +59,13 @@ public class NotificationConsumer {
 
 
 
-//        emailService.sendOrderConfirmationEmail(
-//                destinationEmail,
-//                customerName,
-//                orderConfirmation.totalAmount(),
-//                orderConfirmation.orderReference(),
-//                orderConfirmation.products()
-//        );
+        emailService.sendOrderConfirmationEmail(
+                destinationEmail,
+                customerName,
+                orderConfirmation.totalAmount(),
+                orderConfirmation.orderReference(),
+                orderConfirmation.products()
+        );
     }
 
 }
