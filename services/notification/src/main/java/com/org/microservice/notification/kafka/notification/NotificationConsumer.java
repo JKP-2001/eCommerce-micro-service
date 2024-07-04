@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static com.org.microservice.notification.model.NotificationType.ORDER_CONFIRMATION;
 import static com.org.microservice.notification.model.NotificationType.PAYMENT_CONFIRMATION;
 
 @Service
@@ -48,7 +49,7 @@ public class NotificationConsumer {
         log.info(String.format("Consuming the message from order topic:: %s", orderConfirmation));
         notificationRepository.save(
                 Notification.builder()
-                        .notificationType(PAYMENT_CONFIRMATION)
+                        .notificationType(ORDER_CONFIRMATION)
                         .notificationTime(LocalDateTime.now())
                         .orderConfirmation(orderConfirmation)
                         .build()

@@ -6,6 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(
         name="payment-service",
@@ -13,5 +14,5 @@ import org.springframework.web.bind.annotation.RequestBody;
 )
 public interface PaymentService {
     @PostMapping
-    Integer createPayment(@RequestBody PaymentRequest paymentRequest);
+    Integer createPayment(@RequestHeader(value = "Authorization", required = true) String token ,@RequestBody PaymentRequest paymentRequest);
 }

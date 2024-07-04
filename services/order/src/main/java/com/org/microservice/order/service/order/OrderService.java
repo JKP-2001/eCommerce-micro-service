@@ -17,12 +17,16 @@ import com.org.microservice.order.service.product.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderLineRepository orderLineRepository;
@@ -32,13 +36,18 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderProducer orderProducer;
 
+    @Value("${application.config.token}")
+    private String token;
 
-    @Transactional
+
+    @Transactional(rollbackOn = Exception.class)
     public Integer createOrder(OrderRequest orderRequest) {
-        var customer = customerService.findCustomerById(orderRequest.customerId())
+        String authHeader = "Bearer " + token;
+
+        var customer = customerService.findCustomerById(authHeader, orderRequest.customerId())
                 .orElseThrow(() -> new BusinessException("Cannot create order:: No customer exists with the provided ID"));
 
-        var purchasedProducts = productService.purchaseProducts(orderRequest.products())
+        var purchasedProducts = productService.purchaseProducts(authHeader, orderRequest.products())
                 .orElseThrow(() -> new BusinessException("Some error occurred in between"));
 
         var order = orderRepository.save(orderMapper.mapToOrder(orderRequest));
@@ -76,7 +85,7 @@ public class OrderService {
                 .customer(customer)
                 .build();
 
-        Integer paymentId = paymentService.createPayment(paymentRequest);
+        Integer paymentId = paymentService.createPayment(authHeader, paymentRequest);
 
 
 

@@ -16,7 +16,7 @@ spring:
       username: jkp
       password: password
       host: localhost
-      database: customer
+      database: notification
       authentication-database: admin
   kafka:
     consumer:

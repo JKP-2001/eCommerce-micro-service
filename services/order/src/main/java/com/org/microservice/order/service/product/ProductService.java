@@ -5,6 +5,7 @@ import com.org.microservice.order.dto.product.PurchaseRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,5 +16,5 @@ import java.util.Optional;
 )
 public interface ProductService {
     @PostMapping("/purchase")
-    Optional<List<ProductPurchaseResponse>> purchaseProducts(@RequestBody List<PurchaseRequest> productPurchaseRequest);
+    Optional<List<ProductPurchaseResponse>> purchaseProducts(@RequestHeader(value = "Authorization", required = true) String token, @RequestBody List<PurchaseRequest> productPurchaseRequest);
 }

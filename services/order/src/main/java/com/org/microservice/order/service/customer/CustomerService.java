@@ -4,6 +4,7 @@ import com.org.microservice.order.dto.customer.CustomerResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Optional;
 
@@ -14,5 +15,5 @@ import java.util.Optional;
 public interface CustomerService {
 
     @GetMapping("/{customer-id}")
-    Optional<CustomerResponse> findCustomerById(@PathVariable("customer-id") String customerId);
+    Optional<CustomerResponse> findCustomerById(@RequestHeader(value = "Authorization", required = true) String token, @PathVariable("customer-id") String customerId);
 }
